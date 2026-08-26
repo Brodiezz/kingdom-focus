@@ -4,12 +4,16 @@ const path = require('path');
 require('dotenv').config();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
 
 // Middleware
-app.use(cors());
+app.use(cors({ origin: '*' }));
 app.use(express.json());
-app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.static(path.join(__dirname, '../frontend')));
+
+// Health check
+app.get('/health', (req, res) => {
+  res.json({ status: 'Kingdom Focus API is running 🏰' });
+});
 
 // Routes
 const authRoutes = require('./routes/auth');
@@ -28,26 +32,25 @@ app.use('/api/guilds', guildRoutes);
 app.use('/api/leaderboards', leaderboardRoutes);
 app.use('/api/analytics', analyticsRoutes);
 
-// Health check
-app.get('/health', (req, res) => {
-  res.json({ status: 'Kingdom Focus API is running! 🏰' });
-});
-
-// Serve index.html for web version
+// Serve HTML game client
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../public/index.html'));
+  res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
 
 // Error handling
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).json({ error: 'Internal server error' });
+  res.status(500).json({ error: 'Internal server error', message: err.message });
 });
 
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`🏰 Kingdom Focus API running on port ${PORT}`);
-  console.log(`📱 Web version: http://localhost:${PORT}`);
-  console.log(`📚 API docs: http://localhost:${PORT}/api`);
+  console.log(`
+🏰 Kingdom Focus API Server`);
+  console.log(`📍 Running on http://localhost:${PORT}`);
+  console.log(`🎮 Game at http://localhost:${PORT}/game.html`);
+  console.log(`📚 API docs at http://localhost:${PORT}/api/docs`);
+  console.log(`\n✅ Ready for conquest!\n`);
 });
 
 module.exports = app;

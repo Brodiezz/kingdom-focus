@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kingdom Focus Web - Setup Instructions</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            padding: 40px;
+            line-height: 1.8;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(16, 25, 61, 0.9);
+            border: 2px solid #e94560;
+            border-radius: 12px;
+            padding: 40px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 48px;
+            margin-bottom: 10px;
+            color: #ffd700;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #16c784;
+            margin-bottom: 40px;
+            font-size: 18px;
+        }
+
+        h2 {
+            color: #e94560;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #e94560;
+            padding-bottom: 10px;
+        }
+
+        .step {
+            background: rgba(233, 69, 96, 0.1);
+            border-left: 4px solid #e94560;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+
+        .code-block {
+            background: #000;
+            border: 1px solid #16c784;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 10px 0;
+            overflow-x: auto;
+            color: #16c784;
+        }
+
+        .code-block code {
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        a {
+            display: inline-block;
+            margin: 10px;
+            padding: 15px 30px;
+            background: #e94560;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        a:hover {
+            background: #ff5577;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(233, 69, 96, 0.4);
+        }
+
+        .status {
+            background: rgba(22, 199, 132, 0.1);
+            border: 2px solid #16c784;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .error {
+            background: rgba(233, 69, 96, 0.1);
+            border: 2px solid #e94560;
+            color: #e94560;
+        }
+
+        .success {
+            background: rgba(22, 199, 132, 0.1);
+            border: 2px solid #16c784;
+            color: #16c784;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏰 Kingdom Focus</h1>
+        <p class="subtitle">Turn your focus time into an epic kingdom-building adventure!</p>
+
+        <h2>⚡ Quick Start</h2>
+        <div class="step">
+            <strong>1. Start the Backend Server</strong>
+            <div class="code-block"><code>cd backend<br>npm install<br>npm run dev</code></div>
+            <p>✅ Server will run on http://localhost:3000</p>
+        </div>
+
+        <div class="step">
+            <strong>2. Play the Game</strong>
+            <div class="code-block"><code>http://localhost:3000</code></div>
+            <p>✅ Web interface will load automatically</p>
+        </div>
+
+        <h2>📋 Prerequisites</h2>
+        <div class="step">
+            <strong>Required:</strong>
+            <ul style="margin-left: 20px; margin-top: 10px;">
+                <li>Node.js 18+ (<a href="https://nodejs.org/" target="_blank">Download</a>)</li>
+                <li>PostgreSQL 14+ (<a href="https://www.postgresql.org/download/" target="_blank">Download</a>)</li>
+                <li>Git (<a href="https://git-scm.com/" target="_blank">Download</a>)</li>
+            </ul>
+        </div>
+
+        <h2>🛠️ Setup Instructions</h2>
+        
+        <div class="step">
+            <strong>Step 1: Clone Repository</strong>
+            <div class="code-block"><code>git clone https://github.com/Brodiezz/kingdom-focus.git<br>cd kingdom-focus</code></div>
+        </div>
+
+        <div class="step">
+            <strong>Step 2: Setup Database</strong>
+            <div class="code-block"><code>psql -U postgres<br>CREATE DATABASE kingdom_focus;<br>\c kingdom_focus<br>\i backend/src/db/schema.sql<br>\q</code></div>
+        </div>
+
+        <div class="step">
+            <strong>Step 3: Configure Backend</strong>
+            <div class="code-block"><code>cd backend<br>cp .env.example .env</code></div>
+            <p>Edit <code>.env</code> with your database credentials:</p>
+            <div class="code-block"><code>DB_HOST=localhost<br>DB_PORT=5432<br>DB_NAME=kingdom_focus<br>DB_USER=postgres<br>DB_PASSWORD=your_password<br><br>JWT_SECRET=your_secret_key<br>NODE_ENV=development<br>PORT=3000</code></div>
+        </div>
+
+        <div class="step">
+            <strong>Step 4: Install & Run Backend</strong>
+            <div class="code-block"><code>npm install<br>npm run dev</code></div>
+            <p>✅ You should see: "🏰 Kingdom Focus API Server"</p>
+        </div>
+
+        <div class="step">
+            <strong>Step 5: Access the Game</strong>
+            <p>Open your browser and go to:</p>
+            <div class="code-block"><code>http://localhost:3000</code></div>
+            <p>✅ You're ready to play!</p>
+        </div>
+
+        <h2>🎮 How to Play</h2>
+        <div class="step">
+            <strong>1. Create Account</strong>
+            <p>Click "Create Account" and set up your kingdom and hero name</p>
+        </div>
+
+        <div class="step">
+            <strong>2. Schedule a Quest</strong>
+            <p>Enter your focus task name and duration (15-240 minutes)</p>
+            <p>Select difficulty: Easy, Medium, Hard, or Legendary</p>
+        </div>
+
+        <div class="step">
+            <strong>3. Start Quest</strong>
+            <p>Click "Start Quest" and focus during the timed session</p>
+            <p>The timer will count down in real-time</p>
+        </div>
+
+        <div class="step">
+            <strong>4. Complete Quest</strong>
+            <p>When done, click "Complete Quest"</p>
+            <p>Earn Gold, XP, and maintain your focus streak!</p>
+        </div>
+
+        <div class="step">
+            <strong>5. Build Kingdom</strong>
+            <p>Use earned gold to construct medieval buildings</p>
+            <p>Each building generates passive income</p>
+            <p>Higher level buildings earn more gold per hour!</p>
+        </div>
+
+        <div class="step">
+            <strong>6. Check Leaderboards</strong>
+            <p>See how you rank against other focused players</p>
+            <p>Compete globally or with guild members</p>
+        </div>
+
+        <h2>🔧 Troubleshooting</h2>
+        
+        <div class="step">
+            <strong>Database Connection Error</strong>
+            <div class="code-block"><code>psql -U postgres -d kingdom_focus</code></div>
+            <p>Make sure PostgreSQL is running and credentials match .env</p>
+        </div>
+
+        <div class="step">
+            <strong>Port 3000 Already in Use</strong>
+            <div class="code-block"><code>PORT=3001 npm run dev</code></div>
+            <p>Or stop whatever is using port 3000</p>
+        </div>
+
+        <div class="step">
+            <strong>CORS Errors</strong>
+            <p>Make sure backend is running on http://localhost:3000</p>
+            <p>Clear browser cache and reload</p>
+        </div>
+
+        <div class="step">
+            <strong>Can't Connect to API</strong>
+            <div class="code-block"><code>curl http://localhost:3000/health</code></div>
+            <p>If this fails, backend isn't running</p>
+        </div>
+
+        <h2>📊 Demo Accounts (After Setup)</h2>
+        <p style="text-align: center; color: #aaa;">Create your own account to get started!</p>
+
+        <h2>📚 Documentation</h2>
+        <ul style="margin-left: 20px;">
+            <li><a href="./docs/SETUP_GUIDE.md" style="color: #16c784; display: inline; padding: 0;">Complete Setup Guide</a></li>
+            <li><a href="./docs/API_DOCUMENTATION.md" style="color: #16c784; display: inline; padding: 0;">API Reference</a></li>
+            <li><a href="./docs/ARCHITECTURE.md" style="color: #16c784; display: inline; padding: 0;">Architecture Overview</a></li>
+        </ul>
+
+        <div class="button-container">
+            <a href="http://localhost:3000">Play Game 🎮</a>
+            <a href="https://github.com/Brodiezz/kingdom-focus" target="_blank">GitHub 💻</a>
+        </div>
+
+        <div class="status success">
+            <strong>✅ Ready to Conquer!</strong><br>
+            Follow the steps above, then build your kingdom and master your focus! 🏰⚔️
+        </div>
+    </div>
+
+    <script>
+        // Check if server is running
+        fetch('http://localhost:3000/health')
+            .then(r => r.json())
+            .catch(e => {
+                const status = document.createElement('div');
+                status.className = 'status error';
+                status.style.position = 'fixed';
+                status.style.top = '20px';
+                status.style.right = '20px';
+                status.style.width = '300px';
+                status.textContent = '⚠️ Server not running. Follow setup instructions above.';
+                document.body.appendChild(status);
+            });
+    </script>
+</body>
+</html>

@@ -8,9 +8,9 @@ public class QuestPanel : MonoBehaviour
     [SerializeField] private TMP_InputField descriptionInput;
     [SerializeField] private TMP_InputField durationInput;
     [SerializeField] private TMP_Dropdown difficultyDropdown;
-    [SerializeField] private Button scheduleButton;
-    [SerializeField] private Button startButton;
-    [SerializeField] private Button completeButton;
+    [SerializeField] private UnityEngine.UI.Button scheduleButton;
+    [SerializeField] private UnityEngine.UI.Button startButton;
+    [SerializeField] private UnityEngine.UI.Button completeButton;
     [SerializeField] private TextMeshProUGUI questStatusText;
     [SerializeField] private TextMeshProUGUI timerText;
     [SerializeField] private TextMeshProUGUI rewardsText;
@@ -59,15 +59,13 @@ public class QuestPanel : MonoBehaviour
     
     private void OnStartQuest()
     {
-        // Get latest quest and start it
         StartCoroutine(ApiService.Instance.GetQuests(response => {
             if (response.success)
             {
-                // Parse quests and start the latest
                 questStatusText.text = "🎯 QUEST STARTED - FOCUS NOW!";
                 isQuestActive = true;
                 questStartTime = Time.time;
-                questDuration = int.Parse(durationInput.text) * 60; // Convert to seconds
+                questDuration = int.Parse(durationInput.text) * 60;
                 startButton.interactable = false;
                 completeButton.interactable = true;
             }
@@ -78,21 +76,16 @@ public class QuestPanel : MonoBehaviour
     {
         isQuestActive = false;
         
-        // Get latest quest ID and complete it
         StartCoroutine(ApiService.Instance.GetQuests(response => {
             if (response.success)
             {
                 questStatusText.text = "✅ QUEST COMPLETED!";
                 questStatusText.color = Color.green;
                 
-                // Show rewards
                 rewardsText.text = "💰 +100 Gold\n⭐ +250 XP\n🔥 Streak +1";
                 
                 completeButton.interactable = false;
                 scheduleButton.interactable = true;
-                
-                // Refresh UI
-                StartCoroutine(GameManager.Instance.CompleteQuest(null));
             }
         }));
     }

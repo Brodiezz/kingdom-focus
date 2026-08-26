@@ -10,9 +10,9 @@ public class LoginPanel : MonoBehaviour
     [SerializeField] private TMP_InputField passwordInput;
     [SerializeField] private TMP_InputField kingdomNameInput;
     [SerializeField] private TMP_InputField heroNameInput;
-    [SerializeField] private Button loginButton;
-    [SerializeField] private Button registerButton;
-    [SerializeField] private Button toggleButton;
+    [SerializeField] private UnityEngine.UI.Button loginButton;
+    [SerializeField] private UnityEngine.UI.Button registerButton;
+    [SerializeField] private UnityEngine.UI.Button toggleButton;
     [SerializeField] private TextMeshProUGUI messageText;
     
     private bool isRegisterMode = false;
@@ -48,12 +48,10 @@ public class LoginPanel : MonoBehaviour
         yield return StartCoroutine(ApiService.Instance.Login(username, password, response => {
             if (response.success)
             {
-                // Parse token and userId from response
                 var json = JsonUtility.FromJson<LoginResponse>(response.data);
                 ApiService.Instance.SetAuthToken(json.token, json.user.id);
                 
                 ShowMessage("Login successful! Loading kingdom...", Color.green);
-                // Load main game scene
                 UnityEngine.SceneManagement.SceneManager.LoadScene("GameScene");
             }
             else
@@ -93,7 +91,6 @@ public class LoginPanel : MonoBehaviour
                 ApiService.Instance.SetAuthToken(json.token, json.user.id);
                 
                 ShowMessage("Account created! Welcome to Kingdom Focus!", Color.green);
-                // Load main game scene
                 UnityEngine.SceneManagement.SceneManager.LoadScene("GameScene");
             }
             else

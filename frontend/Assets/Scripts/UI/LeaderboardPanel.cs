@@ -7,7 +7,7 @@ public class LeaderboardPanel : MonoBehaviour
 {
     [SerializeField] private Transform leaderboardContent;
     [SerializeField] private GameObject leaderboardEntryPrefab;
-    [SerializeField] private Button refreshButton;
+    [SerializeField] private UnityEngine.UI.Button refreshButton;
     
     private void Start()
     {
@@ -20,7 +20,6 @@ public class LeaderboardPanel : MonoBehaviour
         StartCoroutine(ApiService.Instance.GetLeaderboard(response => {
             if (response.success)
             {
-                // Parse and display leaderboard
                 DisplayLeaderboard(response.data);
             }
         }));
@@ -28,13 +27,11 @@ public class LeaderboardPanel : MonoBehaviour
     
     private void DisplayLeaderboard(string jsonData)
     {
-        // Clear existing entries
         foreach (Transform child in leaderboardContent)
         {
             Destroy(child.gameObject);
         }
         
-        // Parse JSON and create entries
         var leaderboardJson = JsonUtility.FromJson<LeaderboardResponse>(jsonData);
         
         int rank = 1;

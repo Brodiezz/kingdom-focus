@@ -11,7 +11,7 @@ public class KingdomPanel : MonoBehaviour
     [SerializeField] private TextMeshProUGUI goldPerHourText;
     [SerializeField] private Transform buildingGridParent;
     [SerializeField] private GameObject buildingPrefab;
-    [SerializeField] private Button[] buildingButtons;
+    [SerializeField] private UnityEngine.UI.Button[] buildingButtons;
     
     private int currentKingdomId;
     private Dictionary<string, GameObject> buildingInstances = new Dictionary<string, GameObject>();
@@ -20,7 +20,6 @@ public class KingdomPanel : MonoBehaviour
     {
         LoadKingdom();
         
-        // Setup building buttons
         for (int i = 0; i < buildingButtons.Length; i++)
         {
             int index = i;
@@ -33,7 +32,6 @@ public class KingdomPanel : MonoBehaviour
         StartCoroutine(ApiService.Instance.GetKingdom(response => {
             if (response.success)
             {
-                // Parse kingdom data
                 var kingdomData = JsonUtility.FromJson<KingdomData>(response.data);
                 UpdateKingdomUI(kingdomData);
             }
@@ -49,7 +47,6 @@ public class KingdomPanel : MonoBehaviour
         
         currentKingdomId = data.kingdom.id;
         
-        // Display buildings
         foreach (var building in data.buildings)
         {
             DisplayBuilding(building);
@@ -61,11 +58,9 @@ public class KingdomPanel : MonoBehaviour
         GameObject buildingObj = Instantiate(buildingPrefab, buildingGridParent);
         buildingObj.name = $"{building.building_type}_{building.id}";
         
-        // Set position based on grid coordinates
         Vector3 pos = new Vector3(building.grid_x * 2, 0, building.grid_z * 2);
         buildingObj.transform.localPosition = pos;
         
-        // Setup UI
         TextMeshProUGUI buildingText = buildingObj.GetComponentInChildren<TextMeshProUGUI>();
         buildingText.text = $"{building.building_type}\nLv.{building.level}";
         
@@ -77,7 +72,6 @@ public class KingdomPanel : MonoBehaviour
         string[] buildingTypes = { "Barracks", "Woodcutter", "Farm", "Tower", "Forge", "Market", "Castle", "Arcane", "Guild" };
         string buildingType = buildingTypes[buttonIndex];
         
-        // Find empty grid position
         int gridX = Random.Range(0, 10);
         int gridZ = Random.Range(0, 10);
         
@@ -85,7 +79,7 @@ public class KingdomPanel : MonoBehaviour
             if (response.success)
             {
                 Debug.Log($"Building {buildingType} construction started!");
-                LoadKingdom(); // Refresh kingdom view
+                LoadKingdom();
             }
             else
             {
@@ -101,6 +95,17 @@ public class KingdomData
     public Kingdom kingdom;
     public BuildingData[] buildings;
     public int totalGoldPerHour;
+}
+
+[System.Serializable]
+public class Kingdom
+{
+    public int id;
+    public int user_id;
+    public string name;
+    public int level;
+    public int gold;
+    public int gold_per_hour;
 }
 
 [System.Serializable]

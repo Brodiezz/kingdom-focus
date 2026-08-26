@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kingdom Focus - Web Version</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #8B4513;
+            --secondary: #D2B48C;
+            --accent: #FFD700;
+            --dark: #3E2723;
+            --light: #F5DEB3;
+            --success: #4CAF50;
+            --danger: #FF6B6B;
+            --warning: #FFC107;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #2c1810 0%, #3e2723 50%, #1b0000 100%);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            color: var(--accent);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .user-info {
+            text-align: right;
+            display: none;
+        }
+
+        .user-info.active {
+            display: block;
+        }
+
+        /* Auth Section */
+        .auth-container {
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid var(--accent);
+            border-radius: 15px;
+            padding: 40px;
+            max-width: 500px;
+            margin: 50px auto;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+        }
+
+        .auth-container h2 {
+            color: var(--accent);
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 2em;
+        }
+
+        .auth-container.hidden {
+            display: none;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--light);
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        select {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid var(--secondary);
+            border-radius: 5px;
+            color: #fff;
+            font-size: 1em;
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 10px var(--accent);
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(to right, var(--accent), #FFA500);
+            border: none;
+            border-radius: 5px;
+            color: #000;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: scale(1);
+        }
+
+        .toggle-mode {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .toggle-mode a {
+            color: var(--accent);
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        /* Game Section */
+        .game-container {
+            display: none;
+            grid-template-columns: 1fr 3fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .game-container.active {
+            display: grid;
+        }
+
+        /* Panels */
+        .panel {
+            background: linear-gradient(135deg, rgba(139, 69, 19, 0.8), rgba(210, 180, 140, 0.3));
+            border: 2px solid var(--accent);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .panel h3 {
+            color: var(--accent);
+            margin-bottom: 15px;
+            font-size: 1.5em;
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 10px;
+        }
+
+        .panel p {
+            margin: 10px 0;
+            color: var(--light);
+        }
+
+        .stat {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .stat-value {
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        /* Kingdom Grid */
+        .kingdom-grid {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            min-height: 400px;
+        }
+
+        .buildings-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .building-card {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: 2px solid var(--accent);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .building-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px var(--accent);
+        }
+
+        .building-card .name {
+            font-weight: bold;
+            color: var(--accent);
+            font-size: 0.9em;
+        }
+
+        .building-card .level {
+            color: var(--light);
+            font-size: 0.8em;
+        }
+
+        /* Quest Panel */
+        .quest-form {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .quest-form input,
+        .quest-form select {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--accent);
+        }
+
+        .quest-active {
+            background: rgba(76, 175, 80, 0.2);
+            border: 2px solid var(--success);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .quest-active h3 {
+            color: var(--success);
+            margin-bottom: 15px;
+        }
+
+        .timer {
+            font-size: 3em;
+            color: var(--accent);
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+            margin: 20px 0;
+        }
+
+        .quest-active.danger {
+            background: rgba(255, 107, 107, 0.2);
+            border-color: var(--danger);
+        }
+
+        .quest-active.danger .timer {
+            color: var(--danger);
+        }
+
+        /* Leaderboard */
+        .leaderboard-list {
+            list-style: none;
+        }
+
+        .leaderboard-item {
+            background: rgba(0, 0, 0, 0.3);
+            border-left: 4px solid var(--accent);
+            padding: 12px;
+            margin-bottom: 8px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .rank {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: var(--accent);
+            width: 30px;
+        }
+
+        .rank.rank-1 { color: #FFD700; }
+        .rank.rank-2 { color: #C0C0C0; }
+        .rank.rank-3 { color: #CD7F32; }
+
+        .username {
+            flex: 1;
+            margin: 0 10px;
+        }
+
+        .level {
+            background: rgba(255, 215, 0, 0.2);
+            padding: 4px 8px;
+            border-radius: 4px;
+            color: var(--accent);
+        }
+
+        /* Messages */
+        .message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        .message.show {
+            display: block;
+        }
+
+        .message.success {
+            background: rgba(76, 175, 80, 0.3);
+            border: 2px solid var(--success);
+            color: var(--success);
+        }
+
+        .message.error {
+            background: rgba(255, 107, 107, 0.3);
+            border: 2px solid var(--danger);
+            color: var(--danger);
+        }
+
+        .message.warning {
+            background: rgba(255, 193, 7, 0.3);
+            border: 2px solid var(--warning);
+            color: var(--warning);
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .game-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            border: 4px solid rgba(255, 215, 0, 0.3);
+            border-top: 4px solid var(--accent);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 10px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hidden-input {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div>
+            <h1>🏰 Kingdom Focus</h1>
+            <p style="color: var(--light);">Turn your focus into an epic kingdom!</p>
+        </div>
+        <div class="user-info" id="userInfo">
+            <p>Welcome, <strong id="username"></strong>!</p>
+            <p>👑 Level <span id="heroLevel">1</span></p>
+            <button onclick="logout()" style="max-width: 150px;">Logout</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Auth Container -->
+        <div class="auth-container" id="authContainer">
+            <div id="messageArea"></div>
+            
+            <!-- Login Form -->
+            <div id="loginForm">
+                <h2>🔐 Login to Your Kingdom</h2>
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" id="loginUsername" placeholder="Enter username">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="loginPassword" placeholder="Enter password">
+                </div>
+                <button onclick="login()">⚔️ Enter Kingdom</button>
+                <div class="toggle-mode">
+                    Don't have an account? <a onclick="toggleForm()">Create one</a>
+                </div>
+            </div>
+
+            <!-- Register Form -->
+            <div id="registerForm" class="hidden-input">
+                <h2>👑 Create Your Kingdom</h2>
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" id="regUsername" placeholder="Choose a name">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="regEmail" placeholder="your@email.com">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="regPassword" placeholder="Min 6 characters">
+                </div>
+                <div class="form-group">
+                    <label>Kingdom Name</label>
+                    <input type="text" id="regKingdomName" placeholder="Name your kingdom">
+                </div>
+                <div class="form-group">
+                    <label>Hero Name</label>
+                    <input type="text" id="regHeroName" placeholder="Name your hero">
+                </div>
+                <button onclick="register()">🏰 Create Kingdom</button>
+                <div class="toggle-mode">
+                    Already have an account? <a onclick="toggleForm()">Login</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Container -->
+        <div class="game-container" id="gameContainer">
+            <!-- Left Panel: Hero/Stats -->
+            <div class="panel">
+                <h3>⚔️ Hero</h3>
+                <div class="stat">
+                    <span>Name</span>
+                    <span class="stat-value" id="heroName">-</span>
+                </div>
+                <div class="stat">
+                    <span>Level</span>
+                    <span class="stat-value" id="heroLvl">1</span>
+                </div>
+                <div class="stat">
+                    <span>Experience</span>
+                    <span class="stat-value" id="heroXp">0</span>
+                </div>
+                <div class="stat">
+                    <span>Health</span>
+                    <span class="stat-value" id="heroHealth">100/100</span>
+                </div>
+
+                <h3 style="margin-top: 20px;">📊 Statistics</h3>
+                <div class="stat">
+                    <span>🔥 Current Streak</span>
+                    <span class="stat-value" id="streak">0</span>
+                </div>
+                <div class="stat">
+                    <span>🎯 Best Streak</span>
+                    <span class="stat-value" id="bestStreak">0</span>
+                </div>
+                <div class="stat">
+                    <span>✅ Quests Done</span>
+                    <span class="stat-value" id="questsCount">0</span>
+                </div>
+                <div class="stat">
+                    <span>⏱️ Total Focus</span>
+                    <span class="stat-value" id="totalFocus">0m</span>
+                </div>
+            </div>
+
+            <!-- Center Panel: Kingdom/Quests -->
+            <div class="panel">
+                <h3>🏰 Your Kingdom</h3>
+                <div class="stat">
+                    <span>Kingdom Level</span>
+                    <span class="stat-value" id="kingdomLevel">1</span>
+                </div>
+                <div class="stat">
+                    <span>💰 Gold</span>
+                    <span class="stat-value" id="kingdomGold">1000</span>
+                </div>
+                <div class="stat">
+                    <span>🪙 Per Hour</span>
+                    <span class="stat-value" id="goldPerHour">10</span>
+                </div>
+
+                <h3 style="margin-top: 20px;">🏢 Buildings</h3>
+                <div class="buildings-list" id="buildingsList">
+                    <!-- Buildings generated by JS -->
+                </div>
+                <button onclick="buildBuilding('Barracks', 100, 200)">Build Barracks (500g)</button>
+                <button onclick="buildBuilding('Farm', 110, 200)">Build Farm (500g)</button>
+                <button onclick="buildBuilding('Tower', 120, 200)">Build Tower (500g)</button>
+
+                <h3 style="margin-top: 20px;">⚔️ Quest Session</h3>
+                <div class="quest-form">
+                    <div class="form-group">
+                        <label>Quest Name</label>
+                        <input type="text" id="questName" placeholder="e.g., Deep Work Session">
+                    </div>
+                    <div class="form-group">
+                        <label>Duration (minutes)</label>
+                        <input type="text" id="questDuration" placeholder="30" value="30">
+                    </div>
+                    <div class="form-group">
+                        <label>Difficulty</label>
+                        <select id="questDifficulty">
+                            <option>Easy</option>
+                            <option selected>Medium</option>
+                            <option>Hard</option>
+                            <option>Legendary</option>
+                        </select>
+                    </div>
+                    <button onclick="scheduleQuest()">📋 Schedule Quest</button>
+                </div>
+
+                <div id="questDisplay"></div>
+            </div>
+
+            <!-- Right Panel: Leaderboard -->
+            <div class="panel">
+                <h3>🏆 Leaderboard</h3>
+                <ul class="leaderboard-list" id="leaderboard">
+                    <li class="leaderboard-item">
+                        <span class="rank">1</span>
+                        <span class="username">TopFocuser</span>
+                        <span class="level">Lv.25</span>
+                    </li>
+                </ul>
+                <button onclick="loadLeaderboard()" style="margin-top: 10px;">🔄 Refresh</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:3000/api';
+        let authToken = localStorage.getItem('authToken');
+        let userId = localStorage.getItem('userId');
+        let currentQuestId = null;
+        let questTimer = null;
+        let questTimeLeft = 0;
+
+        // Initialize
+        window.onload = function() {
+            if (authToken && userId) {
+                showGame();
+                loadGameData();
+            } else {
+                showAuth();
+            }
+        };
+
+        function showMessage(message, type = 'info') {
+            const messageArea = document.getElementById('messageArea');
+            messageArea.innerHTML = `<div class="message ${type} show">${message}</div>`;
+            setTimeout(() => {
+                messageArea.innerHTML = '';
+            }, 5000);
+        }
+
+        function toggleForm() {
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+            loginForm.classList.toggle('hidden-input');
+            registerForm.classList.toggle('hidden-input');
+        }
+
+        async function login() {
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+
+            if (!username || !password) {
+                showMessage('Please fill all fields', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await response.json();
+
+                if (data.token) {
+                    authToken = data.token;
+                    userId = data.user.id;
+                    localStorage.setItem('authToken', authToken);
+                    localStorage.setItem('userId', userId);
+                    showMessage('🎉 Welcome back! ' + data.user.username, 'success');
+                    setTimeout(() => {
+                        showGame();
+                        loadGameData();
+                    }, 1000);
+                } else {
+                    showMessage('❌ ' + (data.error || 'Login failed'), 'error');
+                }
+            } catch (error) {
+                showMessage('❌ Connection error: ' + error.message, 'error');
+            }
+        }
+
+        async function register() {
+            const username = document.getElementById('regUsername').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+            const kingdomName = document.getElementById('regKingdomName').value;
+            const heroName = document.getElementById('regHeroName').value;
+
+            if (!username || !email || !password) {
+                showMessage('Please fill all required fields', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/auth/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        username,
+                        email,
+                        password,
+                        kingdomName: kingdomName || `${username}'s Kingdom`,
+                        heroName: heroName || username
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.token) {
+                    authToken = data.token;
+                    userId = data.user.id;
+                    localStorage.setItem('authToken', authToken);
+                    localStorage.setItem('userId', userId);
+                    showMessage('🏰 Kingdom created! Welcome ' + data.user.username, 'success');
+                    setTimeout(() => {
+                        showGame();
+                        loadGameData();
+                    }, 1000);
+                } else {
+                    showMessage('❌ ' + (data.error || 'Registration failed'), 'error');
+                }
+            } catch (error) {
+                showMessage('❌ Connection error: ' + error.message, 'error');
+            }
+        }
+
+        function showAuth() {
+            document.getElementById('authContainer').classList.remove('hidden-input');
+            document.getElementById('gameContainer').classList.remove('active');
+            document.getElementById('userInfo').classList.remove('active');
+        }
+
+        function showGame() {
+            document.getElementById('authContainer').classList.add('hidden-input');
+            document.getElementById('gameContainer').classList.add('active');
+            document.getElementById('userInfo').classList.add('active');
+        }
+
+        async function loadGameData() {
+            try {
+                // Load kingdom
+                const kingdomRes = await apiCall(`/kingdom/${userId}`);
+                if (kingdomRes.kingdom) {
+                    document.getElementById('kingdomLevel').textContent = kingdomRes.kingdom.level;
+                    document.getElementById('kingdomGold').textContent = kingdomRes.kingdom.gold;
+                    document.getElementById('goldPerHour').textContent = kingdomRes.totalGoldPerHour;
+                }
+
+                if (kingdomRes.buildings) {
+                    displayBuildings(kingdomRes.buildings);
+                }
+
+                // Load analytics
+                const analyticsRes = await apiCall(`/analytics/${userId}`);
+                if (analyticsRes.stats) {
+                    document.getElementById('streak').textContent = analyticsRes.stats.current_streak || 0;
+                    document.getElementById('bestStreak').textContent = analyticsRes.stats.longest_streak || 0;
+                    document.getElementById('questsCount').textContent = analyticsRes.stats.total_quests_completed || 0;
+                    document.getElementById('totalFocus').textContent = Math.floor((analyticsRes.stats.total_focus_time_minutes || 0) / 60) + 'h';
+                }
+
+                if (analyticsRes.hero) {
+                    document.getElementById('heroLvl').textContent = analyticsRes.hero.level;
+                    document.getElementById('heroXp').textContent = analyticsRes.hero.experience;
+                    document.getElementById('heroHealth').textContent = analyticsRes.hero.health + '/100';
+                }
+
+                // Load leaderboard
+                loadLeaderboard();
+            } catch (error) {
+                console.error('Error loading game data:', error);
+            }
+        }
+
+        function displayBuildings(buildings) {
+            const buildingsList = document.getElementById('buildingsList');
+            buildingsList.innerHTML = '';
+            buildings.forEach(building => {
+                const card = document.createElement('div');
+                card.className = 'building-card';
+                card.innerHTML = `
+                    <div class="name">${building.building_type}</div>
+                    <div class="level">Lv.${building.level}</div>
+                    <div style="font-size: 0.7em; margin-top: 5px;">+${building.gold_per_hour}g/h</div>
+                `;
+                card.onclick = () => upgradeBuilding(building.id);
+                buildingsList.appendChild(card);
+            });
+        }
+
+        async function buildBuilding(type, x, z) {
+            try {
+                const res = await apiCall(`/kingdom/${userId}/buildings`, 'POST', {
+                    buildingType: type,
+                    gridX: x,
+                    gridZ: z
+                });
+                showMessage('✅ ' + type + ' construction started!', 'success');
+                loadGameData();
+            } catch (error) {
+                showMessage('❌ ' + error.message, 'error');
+            }
+        }
+
+        async function upgradeBuilding(buildingId) {
+            try {
+                const res = await apiCall(`/kingdom/${userId}/buildings/${buildingId}`, 'PUT', {});
+                showMessage('✅ Building upgraded!', 'success');
+                loadGameData();
+            } catch (error) {
+                showMessage('❌ ' + error.message, 'error');
+            }
+        }
+
+        async function scheduleQuest() {
+            const questName = document.getElementById('questName').value;
+            const duration = parseInt(document.getElementById('questDuration').value);
+            const difficulty = document.getElementById('questDifficulty').value;
+
+            if (!questName || !duration) {
+                showMessage('Please fill quest details', 'error');
+                return;
+            }
+
+            try {
+                const res = await apiCall('/quests', 'POST', {
+                    questName,
+                    description: 'Focus session',
+                    durationMinutes: duration,
+                    difficulty
+                });
+                currentQuestId = res.quest.id;
+                questTimeLeft = duration * 60;
+                startQuest(res.quest.id);
+            } catch (error) {
+                showMessage('❌ ' + error.message, 'error');
+            }
+        }
+
+        async function startQuest(questId) {
+            try {
+                await apiCall(`/quests/${questId}/start`, 'POST', {});
+                displayActiveQuest();
+            } catch (error) {
+                showMessage('❌ ' + error.message, 'error');
+            }
+        }
+
+        function displayActiveQuest() {
+            const questName = document.getElementById('questName').value;
+            const display = document.getElementById('questDisplay');
+            display.innerHTML = `
+                <div class="quest-active">
+                    <h3>🎯 ${questName}</h3>
+                    <div class="timer" id="timer">00:00</div>
+                    <p id="questStatus">Focus now! Every minute counts towards your kingdom.</p>
+                    <button onclick="completeQuest(${currentQuestId})" style="background: linear-gradient(to right, var(--success), #66BB6A); margin-top: 15px;">✅ Complete Quest</button>
+                </div>
+            `;
+            startTimer();
+        }
+
+        function startTimer() {
+            if (questTimer) clearInterval(questTimer);
+            questTimer = setInterval(() => {
+                questTimeLeft--;
+                const mins = Math.floor(questTimeLeft / 60);
+                const secs = questTimeLeft % 60;
+                document.getElementById('timer').textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+
+                if (questTimeLeft <= 0) {
+                    clearInterval(questTimer);
+                    document.getElementById('questStatus').textContent = '⏰ Time\'s up!';
+                }
+            }, 1000);
+        }
+
+        async function completeQuest(questId) {
+            try {
+                const res = await apiCall(`/quests/${questId}/complete`, 'POST', {});
+                clearInterval(questTimer);
+                showMessage(`✅ Quest Complete! +${res.rewards.gold} Gold +${res.rewards.xp} XP 🔥 Streak +1`, 'success');
+                document.getElementById('questDisplay').innerHTML = '';
+                loadGameData();
+            } catch (error) {
+                showMessage('❌ ' + error.message, 'error');
+            }
+        }
+
+        async function loadLeaderboard() {
+            try {
+                const res = await apiCall('/leaderboards/global?limit=10');
+                const leaderboard = document.getElementById('leaderboard');
+                leaderboard.innerHTML = '';
+                res.leaderboard.forEach((entry, index) => {
+                    const item = document.createElement('li');
+                    item.className = 'leaderboard-item';
+                    item.innerHTML = `
+                        <span class="rank rank-${index + 1}">#${index + 1}</span>
+                        <span class="username">${entry.username}</span>
+                        <span class="level">Lv.${entry.level}</span>
+                    `;
+                    leaderboard.appendChild(item);
+                });
+            } catch (error) {
+                console.error('Error loading leaderboard:', error);
+            }
+        }
+
+        async function apiCall(endpoint, method = 'GET', body = null) {
+            const options = {
+                method,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${authToken}`
+                }
+            };
+            if (body) options.body = JSON.stringify(body);
+
+            const response = await fetch(`${API_URL}${endpoint}`, options);
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || 'API Error');
+            }
+            return await response.json();
+        }
+
+        function logout() {
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('userId');
+            authToken = null;
+            userId = null;
+            showAuth();
+            document.getElementById('loginUsername').value = '';
+            document.getElementById('loginPassword').value = '';
+            showMessage('👋 Logged out successfully', 'success');
+        }
+    </script>
+</body>
+</html>

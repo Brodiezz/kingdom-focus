@@ -1,30 +1,95 @@
 const express = require('express');
 const router = express.Router();
+const { authMiddleware } = require('../middleware/auth');
+const Guild = require('../models/Guild');
 
-// Placeholder routes
-// GET /api/guilds - List all guilds
-router.get('/', (req, res) => {
-  res.json({ message: 'Get guilds endpoint - to be implemented' });
+// List all guilds
+router.get('/', authMiddleware, async (req, res) => {
+  try {
+    const guilds = await Guild.getAll();
+    res.json({ guilds });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
-// POST /api/guilds - Create new guild
-router.post('/', (req, res) => {
-  res.json({ message: 'Create guild endpoint - to be implemented' });
+// Create new guild
+router.post('/', authMiddleware, async (req, res) => {
+  try {
+    const { guildName, description } = req.body;
+    
+    const guild = await Guild.create(guildName, description, req.userId);
+    
+    // Add leader as member
+    await Guild.addMember(guild.id, req.userId, 'Leader');
+    
+    res.status(201).json({
+      message: 'Guild created successfully',
+      guild
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
-// GET /api/guilds/:guildId - Get guild details
-router.get('/:guildId', (req, res) => {
-  res.json({ message: 'Get guild details endpoint - to be implemented' });
+// Get guild details
+router.get('/:guildId', authMiddleware, async (req, res) => {
+  try {
+    const guild = await Guild.getById(req.params.guildId);
+    if (!guild) {
+      return res.status(404).json({ error: 'Guild not found' });
+    }
+    
+    const members = await Guild.getMembers(req.params.guildId);
+    
+    res.json({
+      guild,
+      members,
+      memberCount: members.length
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
-// POST /api/guilds/:guildId/join - Join guild
-router.post('/:guildId/join', (req, res) => {
-  res.json({ message: 'Join guild endpoint - to be implemented' });
+// Join guild
+router.post('/:guildId/join', authMiddleware, async (req, res) => {
+  try {
+    const guild = await Guild.getById(req.params.guildId);
+    if (!guild) {
+      return res.status(404).json({ error: 'Guild not found' });
+    }
+    
+    const member = await Guild.addMember(req.params.guildId, req.userId);
+    
+    res.json({
+      message: 'Joined guild successfully',
+      member
+    });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
 });
 
-// POST /api/guilds/:guildId/leave - Leave guild
-router.post('/:guildId/leave', (req, res) => {
-  res.json({ message: 'Leave guild endpoint - to be implemented' });
+// Leave guild
+router.post('/:guildId/leave', authMiddleware, async (req, res) => {
+  try {
+    await Guild.removeMember(req.params.guildId, req.userId);
+    
+    res.json({ message: 'Left guild successfully' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Get guild members
+router.get('/:guildId/members', authMiddleware, async (req, res) => {
+  try {
+    const members = await Guild.getMembers(req.params.guildId);
+    res.json({ members });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 module.exports = router;

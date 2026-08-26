@@ -115,4 +115,4 @@ router.get('/:userId/buildings/:buildingId', authMiddleware, async (req, res) =>
   }
 });
 
-module.module.exports = router;
+module.exports = router;

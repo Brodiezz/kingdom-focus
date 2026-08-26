@@ -1,0 +1,46 @@
+.gitignore
+
+# Backend
+backend/node_modules/
+backend/dist/
+backend/.env
+backend/.env.local
+backend/npm-debug.log*
+backend/yarn-debug.log*
+backend/yarn-error.log*
+
+# Frontend (Unity)
+frontend/Library/
+frontend/Temp/
+frontend/Obj/
+frontend/Build/
+frontend/*.csproj
+frontend/*.unityproj
+frontend/*.sln
+frontend/*.suo
+frontend/*.tmp
+frontend/*.user
+frontend/*.userprefs
+frontend/*.pidb
+frontend/*.booproj
+frontend/Assets/AssetStoreTools*
+frontend/.DS_Store
+frontend/Logs/
+frontend/UserSettings/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# OS
+Thumbs.db
+desktop.ini
+
+# Misc
+*.log
+dist/
+build/

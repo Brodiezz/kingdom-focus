@@ -1,144 +1,171 @@
 # Kingdom Focus
 
-A medieval-themed productivity game with 2.5D isometric visuals (Clash of Clans style). Build your kingdom, complete quests, level up your hero, and conquer the realm through focused deep work sessions.
+🏰 A medieval-themed productivity game that turns deep work into an epic quest!
 
-## Features
+## 🎮 Features
 
-### Core Mechanics (Same as Focus Jungle)
-- **Quest Planning**: Schedule deep work sessions as kingdom quests
-- **Deep Work Tracking**: Track focused time to earn gold and XP
-- **Progression System**: Level up your hero, unlock buildings, and expand your kingdom
-- **Streaks & Milestones**: Maintain daily focus streaks to unlock rewards
-- **Guild System**: Join guilds to compete and collaborate with other players
-- **Leaderboards**: Compete with friends on focus time and achievements
-- **Analytics**: Detailed stats on your productivity journey
+- **2.5D Isometric Graphics** (Clash of Clans style)
+- **Kingdom Building System** - Construct and upgrade medieval structures
+- **Quest-Based Sessions** - Turn focus time into game sessions
+- **Hero Progression** - Level up your character through productivity
+- **Guild System** - Join guilds and compete with other players
+- **Leaderboards** - Global, guild, and friends rankings
+- **Streak Tracking** - Maintain daily focus streaks for rewards
+- **Analytics Dashboard** - Track your productivity journey
+- **Achievement System** - Unlock badges and milestones
 
-### Medieval Theme
-- **2.5D Isometric Graphics**: Clash of Clans-style detailed 3D models
-- **Kingdom Building**: Construct and upgrade medieval buildings (Barracks, Tower, Treasury, Library, etc.)
-- **Hero Character**: Customize and level up your medieval hero
-- **Quests & Missions**: Deep work sessions framed as kingdom quests
-- **Guild Halls**: Join guilds with unique aesthetics and collective goals
-- **Realm Map**: Explore and unlock new areas as you progress
+## 🚀 Quick Start
 
-## Project Structure
+### Backend
+```bash
+cd backend
+npm install
+cp .env.example .env
+# Edit .env with database credentials
+npm run dev
+```
+
+### Frontend (Unity)
+```bash
+cd frontend
+# Open with Unity 2022 LTS+
+# Configure API URL in ApiService.cs
+# Press Play in Editor
+```
+
+## 📚 Documentation
+
+- [Setup Guide](docs/SETUP_GUIDE.md) - Complete installation & configuration
+- [API Documentation](docs/API_DOCUMENTATION.md) - Full API reference
+- [Architecture](docs/ARCHITECTURE.md) - System design overview
+- [3D Models Guide](docs/3D_MODELS_GUIDE.md) - Asset specifications
+
+## 🏗️ Project Structure
 
 ```
 kingdom-focus/
-├── frontend/          # Unity 3D / Game Engine (2.5D isometric)
+├── backend/              # Node.js Express API
+│   ├── src/
+│   │   ├── routes/      # API endpoints
+│   │   ├── models/      # Database models
+│   │   ├── middleware/  # Auth & validation
+│   │   └── db/          # Database config
+│   └── package.json
+├── frontend/             # Unity 3D Game
 │   ├── Assets/
-│   │   ├── Models/    # 3D models for buildings, characters, props
-│   │   ├── Materials/ # Textures and shaders
-│   │   ├── Scripts/   # Game logic
-│   │   └── Scenes/    # Game scenes
+│   │   ├── Scripts/
+│   │   │   ├── Managers/
+│   │   │   ├── Network/
+│   │   │   ├── UI/
+│   │   │   ├── Systems/
+│   │   │   └── ...
+│   │   ├── Models/
+│   │   ├── Materials/
+│   │   └── Scenes/
 │   └── ProjectSettings/
-├── backend/           # Node.js / Python API
-│   ├── routes/        # API endpoints
-│   ├── models/        # Database schemas
-│   ├── controllers/   # Business logic
-│   └── middleware/    # Authentication, validation
-├── database/          # PostgreSQL / Firebase
-└── docs/              # Documentation
+└── docs/                # Documentation
 ```
 
-## Getting Started
+## 🛠️ Tech Stack
 
-### Prerequisites
-- Unity 2022 LTS or higher
-- Node.js 18+
-- PostgreSQL 14+
+**Backend**
+- Node.js + Express.js
+- PostgreSQL
+- JWT Authentication
 
-### Installation
+**Frontend**
+- Unity 3D (C#)
+- 2.5D Isometric Rendering
+- TextMesh Pro UI
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/Brodiezz/kingdom-focus.git
-   cd kingdom-focus
-   ```
+## 📊 Progression System
 
-2. **Frontend Setup (Unity)**
-   ```bash
-   cd frontend
-   # Open with Unity Hub and import the project
-   ```
+### Same as Focus Jungle
+1. **Schedule Quests** - Plan deep work sessions (15 min - 4 hours)
+2. **Complete Sessions** - Focus during quest time
+3. **Earn Rewards** - Gold, XP, loot
+4. **Build Kingdom** - Construct medieval buildings
+5. **Level Up** - Improve hero skills and abilities
+6. **Unlock Features** - New buildings, abilities at higher levels
+7. **Join Guilds** - Collaborate with other focused players
+8. **Climb Leaderboards** - Compete globally or in guilds
 
-3. **Backend Setup**
-   ```bash
-   cd backend
-   npm install
-   cp .env.example .env
-   # Configure your database and API keys
-   npm run dev
-   ```
+## 🎨 Medieval Theme
 
-## Gameplay Flow
+**Buildings**
+- Early: Barracks, Woodcutter's Hut, Farm
+- Mid: Tower of Knowledge, Forge, Market
+- Late: Castle Throne Room, Arcane Tower, Guild Hall
 
-1. **Create Your Kingdom**: Customize your hero and name your kingdom
-2. **Schedule Quests**: Plan deep work sessions (15 min - 4 hours)
-3. **Complete Sessions**: Focus during your quest time
-4. **Earn Rewards**: Gold, XP, and loot for completed sessions
-5. **Build & Upgrade**: Use gold to construct and upgrade kingdom buildings
-6. **Level Up**: Increase your hero level to unlock new abilities
-7. **Join Guild**: Team up with others for cooperative quests
-8. **Conquer Realm**: Progress through the map and unlock new territories
+**Heroes**
+- Customizable warrior character
+- Equipment slots (armor, weapons, accessories)
+- Special abilities unlock at higher levels
 
-## Buildings & Progression
+## 🔐 Security
 
-### Early Game
-- **Barracks**: Unlock basic warrior abilities
-- **Woodcutter's Hut**: Generate passive gold
-- **Farm**: Sustain your kingdom
+- Bcrypt password hashing
+- JWT token authentication
+- Input validation & sanitization
+- SQL injection prevention
+- CORS configuration
 
-### Mid Game
-- **Tower of Knowledge**: Unlock study bonuses
-- **Forge**: Craft equipment to boost productivity
-- **Market**: Trade with other players
+## 📈 Performance
 
-### Late Game
-- **Castle Throne Room**: Unlock leadership abilities
-- **Arcane Tower**: Advanced spell learning
-- **Kingdom Hall**: Massive guild bonuses
+- Optimized database queries with indexes
+- Connection pooling
+- LOD models for efficient rendering
+- Texture compression
+- Response caching
 
-## Tech Stack
+## 🚢 Deployment
 
-- **Frontend**: Unity 3D (C#)
-- **Backend**: Node.js / Express
-- **Database**: PostgreSQL
-- **Authentication**: JWT
-- **Real-time**: WebSockets for leaderboards & guild chat
+### Backend
+```bash
+# Heroku
+git push heroku main
+```
 
-## Contributing
+### Frontend
+```bash
+# Build Standalone
+File > Build Settings > Build
 
-Contributions are welcome! Please follow these steps:
+# Build WebGL
+File > Build Settings > WebGL > Build
+```
+
+## 🤝 Contributing
+
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+2. Create feature branch (`git checkout -b feature/amazing-feature`)
 3. Commit changes (`git commit -m 'Add amazing feature'`)
 4. Push to branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+5. Open Pull Request
 
-## License
+## 📝 Roadmap
+
+- [x] Core project structure
+- [x] Backend API setup
+- [x] Database schema
+- [x] Frontend UI panels
+- [ ] 3D models & textures
+- [ ] Animations
+- [ ] Sound & music
+- [ ] Polished UI/UX
+- [ ] Mobile optimization
+- [ ] Multiplayer raids
+- [ ] In-game shop
+- [ ] Season system
+
+## 📄 License
 
 MIT License - see LICENSE file for details
 
-## Roadmap
+## 🏰 Vision
 
-- [x] Project setup and structure
-- [ ] Core 2.5D rendering pipeline
-- [ ] Hero creation and customization
-- [ ] Kingdom building system
-- [ ] Quest scheduling and tracking
-- [ ] Backend API development
-- [ ] User authentication
-- [ ] Guild system
-- [ ] Leaderboards
-- [ ] Analytics dashboard
-- [ ] Mobile optimization
-- [ ] Multiplayer raid system
-
-## Support
-
-For issues and feature requests, please open an issue on GitHub.
+"Transform your focus time into an epic kingdom-building adventure. Every session completed brings you closer to becoming a legendary ruler. Whether you're coding, writing, studying, or creating - Kingdom Focus gamifies your productivity and connects you with a community of focused individuals."
 
 ---
 
-**Build your kingdom. Master your focus. Conquer the realm.**
+**Build your kingdom. Master your focus. Conquer the realm.** 🏰⚔️
